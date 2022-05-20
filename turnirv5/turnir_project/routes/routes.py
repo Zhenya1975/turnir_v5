@@ -128,26 +128,26 @@ def competition_create_new():
         # ситуация №1 в текущем раунде нет боев, а в следующем раунде есть два бойца в бэклоге. Значит следующий бой будет финальным. 
         
         if len(current_backlog_data) == 0 and len(next_round_backlog_data) == 2:
-          print("следующий бой будет финальным")
+          
           current_round_number = 2
-          # создаем новый бой - финальный
-          final_status='final'
+         
+          final_status='not'
           fight_create_func(competition_id, current_round_number, final_status)
           # удаляем из бэклога записи с бойцами
           delete_backlog_records(competition_id, current_round_number)
         # ситуация №2. Если в текущем раунде два бойца, а в следующем ноль. это тоже будет финальный бой
         elif len(current_backlog_data) == 2 and len(next_round_backlog_data) == 0:
-          print("следующий бой будет финальным")
+          
           current_round_number = 1
-          final_status='final'
+          final_status='not'
           fight_create_func(competition_id, current_round_number, final_status)
           # удаляем из бэклога записи с бойцами
           delete_backlog_records(competition_id, current_round_number)
         # ситуация №3. Если в текущем раунде один боец, а в следующем тоже один боец. то это тоже будет финальный бой
         elif len(current_backlog_data) == 1 and len(next_round_backlog_data) == 1:
-          print("следующий бой будет финальным")
+          
           current_round_number = 1
-          final_status='final'
+          final_status='not'
           next_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number+1).first()
           # проверяем на случай если это один и тот же боец
           current_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number).first()
@@ -238,8 +238,8 @@ def ajaxfile_red_fighter():
       print("red_fighter_ajax длина бэклога текущего раунда: ", len(current_backlog_data))
 
       if len(current_backlog_data) == 1 and len(next_round_backlog_data) == 1:
-        print("следующий бой будет финальным")
-        final_status='final'
+       
+        final_status='not'
         next_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number+1).first()
         # проверяем на случай если это один и тот же боец
         current_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number).first()
@@ -258,77 +258,50 @@ def ajaxfile_red_fighter():
           print("один и тот же боец оказался в последнем раунде")
       # если в след раунде два бойца, а в текущем ни одного
       elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 2:
-        print("следующий бой будет финальным")
+
         current_round_number = current_round_number+1
         # создаем новый бой - финальный
-        final_status='final'
+        final_status='not'
         fight_create_func(competition_id, current_round_number, final_status)
         # удаляем из бэклога записи с бойцами
         delete_backlog_records(competition_id, current_round_number)
-      # Если в текущем раунде два бойца, а в следующем ноль. это тоже будет финальный бой
+      # Если в текущем раунде два бойца, а в следующем ноль. 
       elif len(current_backlog_data) == 2 and len(next_round_backlog_data) == 0:
-        print("следующий бой будет финальным")
-        
-        # создаем новый бой - финальный
-        final_status='final'
+        final_status='not'
         fight_create_func(competition_id, current_round_number, final_status)
         # удаляем из бэклога записи с бойцами
         delete_backlog_records(competition_id, current_round_number)
       # создание стандартного боя в текущем раунде
+      elif len(current_backlog_data) == 1 and len(next_round_backlog_data) == 0:
+        final_status='final'
+        fight_id = request.form['fight_id']
+        return jsonify(
+          {
+           'final_status': final_status,
+           'fight_id':fight_id
+           }) 
+        
+      elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 1:
+        final_status='final'
+        fight_id = request.form['fight_id']
+        return jsonify(
+          {
+           'final_status': final_status,
+           'fight_id':fight_id
+           })
+      elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 0:
+        final_status='final'
+        fight_id = request.form['fight_id']
+        return jsonify(
+          {
+           'final_status': final_status,
+           'fight_id':fight_id
+           })  
+      
       else:  
         fight_create_func(competition_id, current_round_number, 'not')
-        # удаляем из бэклога записи с созданным боем
-        # удаляем из бэклога записи с бойцами
         delete_backlog_records(competition_id, current_round_number)
-        # удаляем записи из бэклога бойцов, которые зашли в бой
-         
-        # backlog_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number).all()
-      # print("длина бэклога в раунде ", current_round_number, ": ", len(backlog_data))
-      # if len(backlog_data)>1:
-      #   print('длина бэклога - больше одного: ', len(backlog_data))
-      #   fight_create_func(competition_id, current_round_number)
-      #   # удаляем из бэклога записи с бойцами
-      #   delete_backlog_records(competition_id, current_round_number)
-
-      # elif len(backlog_data)==1:
-      #   # получаем данные бойца из следующего круга
-      #   try:
-      #     next_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number+1).first()
-      #   except Exception as e:
-      #     print("не удалось получить данные бойца из следующего раунда", e)
-      #   # проверяем на случай если это один и тот же боец
-      #   current_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number).first()
-      #   if next_round_fighter_data.fighter_id != current_round_fighter_data.fighter_id:   
-      #     next_round_fighter_data.round_number = current_round_number
-      #     try:
-      #       db.session.commit()
-      #       print("изменили данные бойца из следующего круга")
-      #     except Exception as e:
-      #       print("не удалось переписать номер круга в записи бойца из следующего круга", e)
-      #       db.session.rollback()
-      #     fight_create_func(competition_id, current_round_number)
-      #     # удаляем из бэклога записи с бойцами
-      #     delete_backlog_records(competition_id, current_round_number)
-      #   else:
-      #     print("один и тот же боец в текущем и следующем раунде финиш")
-
-      
-      # elif len(backlog_data)==0:
-      #   # проверяем длину бэклога следующего раунда
-      #   next_round_backlog_data = BacklogDB.query.filter_by(competition_id=competition_id, round_number=current_round_number+1).all()
-      #   print("длина бэклога следующего раунда: ", len(next_round_backlog_data))
-      #   if len(next_round_backlog_data)>=2:
-      #     current_round_number = current_round_number+1
-      #     print("current_round_number", current_round_number)
-      #     fight_create_func(competition_id, current_round_number)
-      #     # удаляем из бэклога записи с бойцами
-      #     delete_backlog_records(competition_id, current_round_number)
-            
-      #   else:
-      #     # финал
-      #     print('финал')
-          
-  
+        
 
       last_created_fight = FightsDB.query.filter_by(competition_id=competition_id, round_number=current_round_number).order_by(desc(FightsDB.fight_id)).first()
       print("red_fighter_ajax last_created_fight_id", last_created_fight.fight_id)
