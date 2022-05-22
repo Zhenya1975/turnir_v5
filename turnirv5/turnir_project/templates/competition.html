@@ -62,18 +62,17 @@
             var fight_id_response = response.fight_id;
 
             route_concat = "/competition_finish/"+ fight_id_response
-            console.log("route_concat c response", route_concat)
 
-            console.log("final_status c response", fight_id_response)
+
             if (final_status == "finish") {
                   window.location.href=route_concat;
             }
-            {#$('.red_fighter_div').html(response);#}
-            {#$('.red_fighter_div').append(response.htmlresponsered);#}
-            {#$('.blue_fighter_div').html(response);#}
-            {#$('.blue_fighter_div').append(response.htmlresponseblue);#}
-            {#$('.title_data_div').html(response);#}
-            {#$('.title_data_div').append(response.htmlresponsetitle);#}
+            $('.red_fighter_div').html(response);
+            $('.red_fighter_div').append(response.htmlresponsered);
+            $('.blue_fighter_div').html(response);
+            $('.blue_fighter_div').append(response.htmlresponseblue);
+            $('.title_data_div').html(response);
+            $('.title_data_div').append(response.htmlresponsetitle);
 
           }
         });
@@ -90,11 +89,12 @@
         success: function(response){
             var final_status = response.final_status;
             var fight_id_response = response.fight_id;
-            console.log("final_status c ответа", final_status)
+            route_concat = "/competition_finish/"+ fight_id_response
+
             if (final_status == "finish") {
-              window.location.href="{{url_for( 'home.test', fight_id=1)}}";
-            } 
-            console.log("final_status  c сервера", final_status);
+                  window.location.href=route_concat;
+            }
+
             $('.red_fighter_div').html(response);
             $('.red_fighter_div').append(response.htmlresponsered);
             $('.blue_fighter_div').html(response);
