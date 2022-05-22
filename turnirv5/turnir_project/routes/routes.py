@@ -265,7 +265,7 @@ def ajaxfile():
 
         current_backlog_data = BacklogDB.query.filter_by(competition_id=competition_id,
                                                          round_number=current_round_number).all()
-        print("current_backlog_data:", len(current_backlog_data), ", next_round_backlog_data: ", next_round_backlog_data)
+        # print("current_backlog_data:", len(current_backlog_data), ", next_round_backlog_data: ", next_round_backlog_data)
 
         if len(current_backlog_data) == 1 and len(next_round_backlog_data) == 1:
             final_status = 'continue'
@@ -334,7 +334,23 @@ def ajaxfile():
                     'fight_id': fight_id,
                     'route': "{{url_for( 'home.test', fight_id=1)}}"
                 })
-
+        # если в текущем раунде остался один боец, то перекидываем его в следующий раунд и уходим в след раунд
+        elif len(current_backlog_data) == 1 and len(next_round_backlog_data) >1:
+            current_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id,
+                                                                   round_number=current_round_number).first()
+            current_round_fighter_data.round_number = current_round_number + 1
+            current_round_number = current_round_number + 1
+            final_status = 'continue'
+            fight_create_func(competition_id, current_round_number, final_status)
+            # удаляем из бэклога записи с бойцами
+            delete_backlog_records(competition_id, current_round_number)
+        # если в текущем не осталось бойцов, а в след раунде много бойцов, то меняем раунд
+        elif len(current_backlog_data) == 0 and len(next_round_backlog_data) > 1:
+            current_round_number = current_round_number + 1
+            final_status = 'continue'
+            fight_create_func(competition_id, current_round_number, final_status)
+            # удаляем из бэклога записи с бойцами
+            delete_backlog_records(competition_id, current_round_number)
         else:
             fight_create_func(competition_id, current_round_number, 'continue')
             delete_backlog_records(competition_id, current_round_number)
