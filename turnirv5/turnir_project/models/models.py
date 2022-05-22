@@ -6,6 +6,7 @@ class ParticipantsDB(db.Model):
   participant_first_name = db.Column(db.String)
   participant_last_name = db.Column(db.String)
   registration_participant = db.relationship('RegistrationsDB', backref='registration_participant')
+  fighter_image = db.Column(db.String)
   
 
 class CompetitionsDB(db.Model):

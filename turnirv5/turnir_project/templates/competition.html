@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col text-center">
       <div class="title_data_div">
-        Раунд: {{ fight_data.round_number }}. Fight_id: {{fight_data.fight_id}}. Fight_status: {{fight_data.final_status}}
+          <h3>Раунд: {{ fight_data.round_number }} </h3>
         <p data-id='{{fight_data.final_status}}' class="check_final_status"></p>
         <p data-id='{{fight_data.fight_id}}' class="check_fight_id"></p>
       </div>
@@ -14,21 +14,28 @@
   </div>
   
   <div class="row">
-    <div class="col text-center">
+    <div class="col text-center d-flex justify-content-end">
       <div class="red_fighter_div">
-      {{fight_data.red_fighter.registration_participant.participant_first_name}} {{fight_data.red_fighter.registration_participant.participant_last_name}}
+                    {{fight_data.red_fighter.registration_participant.participant_first_name}} {{fight_data.red_fighter.registration_participant.participant_last_name}}
+                    <div style="margin-bottom: 180px;">
+                            <img src= {{ fight_data.red_fighter.registration_participant.fighter_image }} class="float-left" alt="Fighter image" width="150" height="150">
+                    </div>
         <p></p>
         <button data-id='{{fight_data.fight_id}}' type="button" class="select_red_fighter btn btn-primary">Выбрать</button>
       </div>  
       <p></p>
 
     </div>
-    <div class="col text-center">
-      <div class="blue_fighter_div text-center">
-      {{fight_data.blue_fighter.registration_participant.participant_first_name}} {{fight_data.blue_fighter.registration_participant.participant_last_name}}
+    <div class="col text-center d-flex justify-content-start">
+      <div class="blue_fighter_div">
+            {{fight_data.blue_fighter.registration_participant.participant_first_name}} {{fight_data.blue_fighter.registration_participant.participant_last_name}}
+            <div style="margin-bottom: 180px;">
+                    <img src= {{ fight_data.blue_fighter.registration_participant.fighter_image }} class="float-left" alt="Fighter image" width="150" height="150">
+            </div>
+            <p></p>
+            <button data-id='{{fight_data.blue_fighter_id}}' type="button" class="select_blue_fighter btn btn-primary">Выбрать</button>
       </div>
-      <p></p>
-      <button data-id='{{fight_data.blue_fighter_id}}' type="button" class="select_blue_fighter btn btn-primary">Выбрать</button>
+
     </div>
     
   </div>

@@ -16,12 +16,13 @@ def home_view():
 def fill_fighters():
     with open('fighters.csv', encoding='utf8') as csvfile:
         fighters_csv_list = csv.reader(csvfile)
+
         for row in fighters_csv_list:
-            new_fighter = ParticipantsDB(participant_first_name=row[0], participant_last_name=row[1])
+            new_fighter = ParticipantsDB(participant_first_name=row[0], participant_last_name=row[1], fighter_image = row[8])
             db.session.add(new_fighter)
             try:
                 db.session.commit()
-                print("Бойцы импортированы в ParticipantsDB")
+                print("Боец импортирован в ParticipantsDB")
             except Exception as e:
                 print("Не получилось импортировать бойцов. Ошибка: ", e)
                 db.session.rollback()
@@ -273,7 +274,8 @@ def ajaxfile():
             current_round_fighter_data = BacklogDB.query.filter_by(competition_id=competition_id,
                                                                    round_number=current_round_number).first()
             if next_round_fighter_data.fighter_id != current_round_fighter_data.fighter_id:
-                next_round_fighter_data.round_number = current_round_number
+                current_round_fighter_data.round_number = current_round_number + 1
+                current_round_number = current_round_number + 1
                 try:
                     db.session.commit()
                     print("изменили данные бойца из следующего круга")
