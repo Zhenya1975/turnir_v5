@@ -209,9 +209,10 @@ def competition_view(competition_id):
 @home.route('/competition_finish/<int:fight_id>')
 def finish_red(fight_id):
     fight_data = FightsDB.query.get(fight_id)
-    winner_red_fighter_id = fight_data.red_fighter_id
-
-    winner_data = ParticipantsDB.query.get(winner_red_fighter_id)
+    winner_red_reg_id = fight_data.red_fighter_id
+    registration_data = RegistrationsDB.query.get(winner_red_reg_id)
+    participant_id = registration_data.participant_id
+    winner_data = ParticipantsDB.query.get(participant_id)
     print("winner_data", winner_data)
     return render_template("finish.html", winner_data=winner_data)
 
