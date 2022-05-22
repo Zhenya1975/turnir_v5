@@ -305,7 +305,8 @@ def ajaxfile():
             return jsonify(
                 {
                     'final_status': final_status,
-                    'fight_id': fight_id
+                    'fight_id': fight_id,
+                    'route': "{{url_for( 'home.test', fight_id=1)}}"
                 })
 
         elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 1:
@@ -316,7 +317,8 @@ def ajaxfile():
             return jsonify(
                 {
                     'final_status': final_status,
-                    'fight_id': fight_id
+                    'fight_id': fight_id,
+                    'route': "{{url_for( 'home.test', fight_id=1)}}"
                 })
         elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 0:
             final_status = 'finish'
@@ -325,7 +327,8 @@ def ajaxfile():
             return jsonify(
                 {
                     'final_status': final_status,
-                    'fight_id': fight_id
+                    'fight_id': fight_id,
+                    'route': "{{url_for( 'home.test', fight_id=1)}}"
                 })
 
         else:
