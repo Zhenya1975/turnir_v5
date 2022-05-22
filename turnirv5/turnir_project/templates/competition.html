@@ -61,9 +61,9 @@
             var final_status = response.final_status;
             var fight_id_response = response.fight_id;
             console.log("final_status c response", fight_id_response)
-            {#if (final_status == "finish") {#}
-            {#      window.location.href="{{url_for( 'home.test', fight_id=1)}}";#}
-            {#}#}
+            if (final_status == "finish") {
+                  window.location.href="{{url_for( 'home.test', fight_id=1)}}";
+            }
             $('.red_fighter_div').html(response);
             $('.red_fighter_div').append(response.htmlresponsered);
             $('.blue_fighter_div').html(response);

@@ -190,7 +190,7 @@ def competition_create_new():
         return render_template('competition_start.html')
 
 
-@home.route('/test/<int:fight_id>')
+@home.route('/finish/<int:fight_id>')
 def test(fight_id):
     print("fight_id_test", fight_id)
     return "testtt"
@@ -301,32 +301,32 @@ def ajaxfile():
         elif len(current_backlog_data) == 1 and len(next_round_backlog_data) == 0:
             final_status = 'finish'
             print("current_backlog_data) == 1 and len(next_round_backlog_data) = 0. Финишный бой - ", fight_id)
-            return redirect(url_for('home.test', fight_id=fight_id))
-            # return jsonify(
-            #     {
-            #         'final_status': final_status,
-            #         'fight_id': fight_id
-            #     })
+
+            return jsonify(
+                {
+                    'final_status': final_status,
+                    'fight_id': fight_id
+                })
 
         elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 1:
             final_status = 'finish'
             print("current_backlog_data) == 0 and len(next_round_backlog_data) = 1. Финишный бой - ", fight_id)
 
-            return redirect(url_for('home.test', fight_id=fight_id))
-            # return jsonify(
-            #     {
-            #         'final_status': final_status,
-            #         'fight_id': fight_id
-            #     })
+
+            return jsonify(
+                {
+                    'final_status': final_status,
+                    'fight_id': fight_id
+                })
         elif len(current_backlog_data) == 0 and len(next_round_backlog_data) == 0:
             final_status = 'finish'
             print("current_backlog_data) == 0 and len(next_round_backlog_data) = 0. Финишный бой - ", fight_id)
-            return redirect(url_for('home.test', fight_id=fight_id))
-            # return jsonify(
-            #     {
-            #         'final_status': final_status,
-            #         'fight_id': fight_id
-            #     })
+
+            return jsonify(
+                {
+                    'final_status': final_status,
+                    'fight_id': fight_id
+                })
 
         else:
             fight_create_func(competition_id, current_round_number, 'continue')
