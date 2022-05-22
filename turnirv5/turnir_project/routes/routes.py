@@ -225,7 +225,6 @@ def ajaxfile():
     if request.method == 'POST':
         fight_id = request.form['fight_id']
         winner_color = request.form['winner_color']
-
         current_fight_data = FightsDB.query.get(fight_id)
         competition_id = current_fight_data.competition_id
         current_round_number = current_fight_data.round_number
@@ -352,6 +351,7 @@ def ajaxfile():
             # удаляем из бэклога записи с бойцами
             delete_backlog_records(competition_id, current_round_number)
         else:
+
             fight_create_func(competition_id, current_round_number, 'continue')
             delete_backlog_records(competition_id, current_round_number)
 

@@ -33,7 +33,7 @@
                     <img src= {{ fight_data.blue_fighter.registration_participant.fighter_image }} class="float-left" alt="Fighter image" width="150" height="150">
             </div>
             <p></p>
-            <button data-id='{{fight_data.blue_fighter_id}}' type="button" class="select_blue_fighter btn btn-primary">Выбрать</button>
+            <button data-id='{{fight_data.fight_id}}' type="button" class="select_blue_fighter btn btn-primary">Выбрать</button>
       </div>
 
     </div>
@@ -112,19 +112,32 @@
           }
         });
         });
-        $('.select_blue_fighter').click(function(){
-            var blue_fighter_id = $(this).data('id');
 
-            $.ajax({
-            url: '/ajaxfile_blue_fighter',
-            type: 'post',
-            data: {blue_fighter_id: blue_fighter_id},
-            // success: function(data){
-            //     $('.modal-body').html(data);
-            //     $('.modal-body').append(data.htmlresponse);
-            //     $('#competition_edit_modal').modal('show');
-            // }
-          });
+        $('.select_blue_fighter').click(function(){
+        var fight_id = $(this).data('id');
+        //console.log("fight_id c первой кнопки: ", fight_id)
+        $.ajax({
+        url: '/ajaxfile',
+        type: 'post',
+        data: {fight_id:fight_id, winner_color:"blue"},
+        success: function(response){
+            var final_status = response.final_status;
+            var fight_id_response = response.fight_id;
+            route_concat = "/competition_finish/"+ fight_id_response
+
+            if (final_status == "finish") {
+                  window.location.href=route_concat;
+            }
+
+            $('.red_fighter_div').html(response);
+            $('.red_fighter_div').append(response.htmlresponsered);
+            $('.blue_fighter_div').html(response);
+            $('.blue_fighter_div').append(response.htmlresponseblue);
+            $('.title_data_div').html(response);
+            $('.title_data_div').append(response.htmlresponsetitle);
+
+          }
+        });
         });
      
 
