@@ -21,6 +21,7 @@ class RegistrationsDB(db.Model):
   activity_status = db.Column(db.Integer, default=1)
   red_fighter = db.relationship('FightsDB', backref='red_fighter', foreign_keys="[FightsDB.red_fighter_id]")
   blue_fighter = db.relationship('FightsDB', backref='blue_fighter', foreign_keys="[FightsDB.blue_fighter_id]")
+  winner_reg = db.relationship('FightsDB', backref='winner_reg', foreign_keys="[FightsDB.fight_winner_id]")
 
 class FightsDB(db.Model):
     fight_id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +29,7 @@ class FightsDB(db.Model):
     round_number = db.Column(db.Integer)
     red_fighter_id = db.Column(db.Integer, db.ForeignKey('registrationsDB.reg_id'))
     blue_fighter_id = db.Column(db.Integer, db.ForeignKey('registrationsDB.reg_id'))
-    fight_winner_id = db.Column(db.Integer, default=0)
+    fight_winner_id = db.Column(db.Integer, db.ForeignKey('registrationsDB.reg_id'))
     final_status = db.Column(db.String, default='not')
 
 class BacklogDB(db.Model):

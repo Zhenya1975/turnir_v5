@@ -211,11 +211,12 @@ def competition_view(competition_id):
 def finish_red(fight_id):
     fight_data = FightsDB.query.get(fight_id)
     winner_red_reg_id = fight_data.red_fighter_id
+    competition_id = fight_data.competition_id
     registration_data = RegistrationsDB.query.get(winner_red_reg_id)
     participant_id = registration_data.participant_id
     winner_data = ParticipantsDB.query.get(participant_id)
-    print("winner_data", winner_data)
-    return render_template("finish.html", winner_data=winner_data)
+    fights_data = FightsDB.query.filter_by(competition_id=competition_id).all()
+    return render_template("finish.html", winner_data=winner_data, fights_data=fights_data)
 
 
 @home.route('/ajaxfile', methods=["POST", "GET"])
